@@ -1,0 +1,141 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<head>
+<title>- 液晶のチェック用スクリプト -</title>
+<style type="text/css">
+div#toucharea{
+	width:360px; height:300px;
+	position:relative;
+	border: 1px dotted #000;
+	background-color:#FFF;
+	text-align: center;
+	font-family: impact;
+	font-size:120%
+}
+p#touchmode{
+	width:100%;
+	margin-top:25%;
+}
+</style>
+<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.4.1/jquery.min.js"></script>
+<script type="text/javascript" src="./jquery.fullscreen.js"></script>
+<script>
+$(function(){
+	var h=0, s=255;
+	var ColorSelectMode=0;
+	var setvalue = function(o,px,py){
+		if(1<ColorSelectMode) return;
+		var clientw = $(o).attr('clientWidth');
+		var clienth = $(o).attr('clientHeight');
+		if (clientw<360) clientw=360;
+		if (clienth<256) clienth=256;
+		var ofs=$(o).offset();
+		var ox=ofs.left;
+		var oy=ofs.top;
+		var cx=((px-ox)*360)/clientw;
+		var cy=((py-(oy+clienth*0.2))*256)/(clienth*0.75);
+		if(cx<0) cx=0; else if(cx>359) cx=359;
+		if(cy<0) cy=0; else if(cy>255) cy=255;
+		var v=255;
+		if(0==ColorSelectMode){
+			h = 360-cx;
+			v = 255-cy;
+		}else{
+			s = ~~(256*(cx/360));
+			v = 255-cy;
+		}
+		var f, i, p, q, t, r, g, b;
+		i = ~~(Math.floor(h/60.0)%6);
+		f = (h/60)-Math.floor(h/60);
+		p = Math.round(v*(1-(s/255)));
+		q = Math.round(v*(1-(s/255)*f));
+		t = Math.round(v*(1-(s/255)*(1-f)));
+		switch(i){
+			case 0: r=v;g=t;b=p; break;
+			case 1: r=q;g=v;b=p; break;
+			case 2: r=p;g=v;b=t; break;
+			case 3: r=p;g=q;b=v; break;
+			case 4: r=t;g=p;b=v; break;
+			case 5: r=v;g=p;b=q; break;
+		}
+		var rgbcolor="000000"+(((r&255)<<16)|((g&255)<<8)|(b&255)).toString(16);
+		rgbcolor="#"+rgbcolor.substr(rgbcolor.length-6,6);
+		$(o).css("background-color", rgbcolor);
+		$(document.body).css("background-color", rgbcolor);
+		$("#info").html("color:"+rgbcolor);
+		if (v<128||s>128) {
+			$(o).css("color", "#fff");
+		} else {
+			$(o).css("color", "#000");
+		}
+	};
+	var toggleHueAndSatMode = function(o){
+		ColorSelectMode++; ColorSelectMode%=3;
+		if(0==ColorSelectMode){
+			$(o).html('<p id="touchmode"><--- Hue Select ---></p>');
+		}else if(1==ColorSelectMode){
+			$(o).html('<p id="touchmode"><--- Saturation Select ---></p>');
+		}else{
+			$(o).html('<p id="touchmode">-- Pause --</p>');
+		}
+		$("p#touchmode").show("slow");
+		$("p#touchmode").fadeOut("slow");
+	};
+	$("#toucharea").mousemove(function(e){
+		setvalue(e.target,e.pageX,e.pageY);
+	})
+	.click(function(){
+		toggleHueAndSatMode(this);
+	})
+	.bind('touchstart',function(e){
+		e.preventDefault()
+		toggleHueAndSatMode(this);
+	})
+	.bind('touchmove', function(e){
+		var touchevt = e.originalEvent.touches[0] || e.originalEvent.changedTouches[0];
+		setvalue(e.target,touchevt.pageX,touchevt.pageY);
+	});
+	$(":button#hideUI").click(function(){
+		$("#toucharea").css("border-color","transparent");
+		$("#inittext").fadeOut("slow");
+		$("#fullscreenBtns").fadeOut("slow");
+	});
+	$(":button#startFullScreen").click(function(){
+		if (window.supportsFullScreen) {
+			$("#toucharea").css("border","none");
+			$("#inittext").fadeOut("slow");
+//			window.fullScreenApi.requestFullScreen($("#toucharea").get(0));
+			$("#toucharea").requestFullScreen();
+		} else {
+			alert("Your browser does not support fullscreen mode.");
+			$("#toucharea").css("border-color","transparent");
+			$("#toucharea").css("width","95%").css("height",(($(window).height()*80)/100));
+			$("#fullscreenBtns").fadeOut("slow");
+			$("#inittext").fadeOut("slow");
+		}
+	});
+	$("#inittext").mousemove(function(e){
+		$(this).hide();
+	})
+	.bind('touchstart', function(e){
+		$(this).hide();
+	})
+	.bind('touchmove', function(e){
+		$(this).hide();
+	});
+});
+</script>
+
+<head>
+<body>
+<div id="toucharea">
+  <p id="inittext" style="width:100%; margin-top:25%;">*TOUCH OR MOUSE-OVER*</p>
+</div>
+<div id="fullscreenBtns">
+  <span id="info" style="width=360px;background-color:#fff;">----</span>
+  <p></p>
+  <input type="button" id="hideUI" value="HIDE UI" style="width:250px; height:48px; margin-top:20px; margin-bottom:10px;">
+  <input type="button" id="startFullScreen" value="FULLSCREEN MODE" style="width:250px; height:48px; margin-top:20px; margin-bottom:10px;">
+</div>
+</html>
