@@ -82,19 +82,43 @@ $(function(){
 		$("p#touchmode").show("slow");
 		$("p#touchmode").fadeOut("slow");
 	};
+	var showHelp = function(o){
+		$(o).html('<p id="touchmode">MOUSE DRAG or MULTI TOUCH<br />to change saturation</p>');
+		$("p#touchmode").show("slow");
+		setTimeout(function(){
+			$("p#touchmode").fadeOut("slow");
+		},1800);
+	}
 	$("#toucharea").mousemove(function(e){
-		setvalue(e.target,e.pageX,e.pageY);
+		setvalue(this,e.pageX,e.pageY);
 	})
-	.click(function(){
-		toggleHueAndSatMode(this);
+	.mousedown(function(e){
+		ColorSelectMode=1;
+		setvalue(this,e.pageX,e.pageY);
 	})
+	.mouseup(function(e){
+		showHelp(this);
+		ColorSelectMode=0;
+	})
+	.mouseout(function(e){
+		ColorSelectMode=0;
+	})
+//	.click(function(){
+//		toggleHueAndSatMode(this);
+//	})
 	.bind('touchstart',function(e){
 		e.preventDefault()
-		toggleHueAndSatMode(this);
+//		toggleHueAndSatMode(this);
+		showHelp(this);
 	})
 	.bind('touchmove', function(e){
 		var touchevt = e.originalEvent.touches[0] || e.originalEvent.changedTouches[0];
-		setvalue(e.target,touchevt.pageX,touchevt.pageY);
+		if(1<e.originalEvent.touches.length){
+			ColorSelectMode=1;
+		}else{
+			ColorSelectMode=0;
+		}
+		setvalue(this,touchevt.pageX,touchevt.pageY);
 	});
 	$(":button#hideUI").click(function(){
 		$("#toucharea").css("border-color","transparent");
@@ -104,6 +128,9 @@ $(function(){
 	$(":button#startFullScreen").click(function(){
 		if (window.supportsFullScreen) {
 			$("#toucharea").css("border","none");
+			if(jQuery.browser.webkit){
+				$("#toucharea").css("width","100%").css("height",screen.height);
+			}
 			$("#inittext").fadeOut("slow");
 //			window.fullScreenApi.requestFullScreen($("#toucharea").get(0));
 			$("#toucharea").requestFullScreen();
@@ -130,7 +157,7 @@ $(function(){
 <head>
 <body>
 <div id="toucharea">
-  <p id="inittext" style="width:100%; margin-top:25%;">*TOUCH OR MOUSE-OVER*</p>
+  <p id="inittext" style="width:100%; margin-top:25%;">** TOUCH OR MOUSE OVER **</p>
 </div>
 <div id="fullscreenBtns">
   <span id="info" style="width=360px;background-color:#fff;">----</span>
