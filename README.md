@@ -1,26 +1,26 @@
-【内容】
+###【内容】
 
-screen-checker by blogsapo  
-http://saponoblog.seesaa.net/  
+液晶画面の状態(色ムラ、ドット欠け)をチェックするための簡単なブラウザアプリ。
 
-【動作】
+###【動作】
 
-液晶スクリーンの状態(色ムラ、ドット欠け)をチェックするためのJavaScriptプログラムサンプル。
-初期表示の点線枠ボックスエリア上でマウスを動かす、あるいはタッチパネルでタッチすると座標に応じて
-ブラウザの背景カラーが変化する。
-このときマウスまたはタッチ座標のY軸を V, X軸を H または S の値としてHSV値を求めカラーを決定する。
-マウスのボタン押し下げまたは２点以上のマルチタッチで Saturation の選択になる。
+index.html を開いた初期表示の点線枠ボックスエリア上でマウスを動かす、あるいは
+タッチパネルでタッチすると座標に応じて背景カラーが変化する。このときマウスまたは
+タッチ座標のY軸を V, X軸を H または S の値としてHSV値を求めカラーを決定する。
+マウスのドラッグまたは２点以上のマルチタッチ状態のX軸移動により彩度(Saturation)が
+変化する。
 
-実際の使用法としては、一切の表示物を消去してスクリーン一杯に単一色のみ表示するのが望ましいが、
-[FULL SCREEN] ボタンをプッシュしてフルスクリーン状態に切り換えることができる。ただし、
-FULL SCREEN はブラウザが対応している場合のみ機能する。対応していない場合は、おおよそブラウザの
-クライアント領域に合うようにボックスを拡張するが、ブラウザのインターフェイス要素は消えない。
+ブラウザが対応している場合 [FULL SCREEN] ボタンでフルスクリーン表示にできる。
+(各ブラウザの対応状況はこちら→ https://caniuse.com/#feat=fullscreen )
+対応していない場合は、ブラウザのクライアント領域全体をカバーするようにdiv要素を拡張する。
 
-【構成】
+###- LICENSE -
 
-1.sapono-screen-checker.html  
-2.jquery.fullscreen.js  
+Copyright (c) 2013-2018 DigiSapo.  Released under the WTFPL License:
 
-2.jquery.fullscreen.js は https://gist.github.com/johan/2128691/  
-より引用して本プログラムに適合するように一部修正した。  
+This program is free software. It comes without any warranty, to 
+the extent permitted by applicable law. You can redistribute it 
+and/or modify it under the terms of the Do What The Fuck You Want 
+To Public License, Version 2, as published by Sam Hocevar. See 
+http://www.wtfpl.net/ for more details.
 

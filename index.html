@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="ja">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="description" content="html5,javascript" />
+    <title>- 液晶のチェック用スクリプト -</title>
+    <style type="text/css">
+      div#toucharea{
+      	width:360px; height:300px;
+      	position:relative;
+      	border: 1px dotted #000;
+      	background-color:#FFF;
+      	text-align: center;
+      	font-family: impact;
+      	font-size:120%
+      }
+      p#touchmode{
+      	width:100%;
+      	margin-top:25%;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="toucharea">
+      <p id="inittext" style="width:100%; margin-top:25%;">** TOUCH OR MOUSE OVER **</p>
+    </div>
+    <div id="fullscreenBtns">
+      <span id="info" style="width=360px;background-color:#fff;">----</span>
+      <p></p>
+      <input type="button" id="startFullScreen" value="FULLSCREEN MODE" style="width:250px; height:48px; margin-top:20px; margin-bottom:10px;">
+    </div>
+    
+    <!-- Scripts begin -->
+    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.4.1/jquery.min.js"></script>
+    <script type="text/javascript" src="./fullscreen.js"></script>
+    <!-- Scripts end -->
+	
+  </body>
+</html>
